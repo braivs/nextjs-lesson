@@ -5,8 +5,23 @@ import {Card} from "../../components/Card/Card"
 import {getLayout} from "../../components/Layout/BaseLayout/BaseLayout"
 import {GetServerSideProps} from "next"
 
+const authMe = async () => {
+  const user = {} //axios.get('auth/me')
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/test',
+        permanent: false
+      }
+    }
+  }
+}
+
 export const getServerSideProps: GetServerSideProps = async ({res}) => {
    // res.setHeader('Cache-Control', 'public, s-maxage=10, stale-while-revalidate=100')
+
+  await authMe() 
 
   const episodes = await API.rickAndMorty.getEpisodes()
 
@@ -15,15 +30,6 @@ export const getServerSideProps: GetServerSideProps = async ({res}) => {
   if (!episodes) {
     return {
       notFound: true
-    }
-  }
-
-  if (!isAuth) { 
-    return {
-      redirect: {
-        destination: '/test',
-        permanent: false
-      }
     }
   }
 
